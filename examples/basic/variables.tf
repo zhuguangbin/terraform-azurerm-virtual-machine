@@ -1,6 +1,6 @@
 variable "create_public_ip" {
   type     = bool
-  default  = false
+  default  = true
   nullable = false
 }
 
@@ -33,6 +33,6 @@ variable "resource_group_name" {
 
 variable "size" {
   type     = string
-  default  = "Standard_F2"
+  default  = "Standard_F4s_v2"
   nullable = false
 }

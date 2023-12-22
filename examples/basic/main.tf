@@ -50,6 +50,9 @@ module "linux" {
   image_os                   = "linux"
   resource_group_name        = local.resource_group.name
   allow_extension_operations = false
+  priority                   = "Spot"
+  eviction_policy            = "Deallocate"
+  max_bid_price              = "-1"
   data_disks = [
     for i in range(2) : {
       name                 = "linuxdisk${random_id.id.hex}${i}"
@@ -89,7 +92,13 @@ module "linux" {
     caching              = "ReadWrite"
     storage_account_type = "Standard_LRS"
   }
-  os_simple = "UbuntuServer"
+  # os_simple = "UbuntuServer"
+  source_image_reference = {
+    publisher = "canonical"
+    offer     = "0001-com-ubuntu-server-jammy"
+    sku       = "22_04-lts-gen2"
+    version    = "latest"
+  }
   size      = var.size
   subnet_id = module.vnet.vnet_subnets[0]
 
@@ -179,6 +188,7 @@ module "windows" {
 resource "local_file" "ssh_private_key" {
   filename = "${path.module}/key.pem"
   content  = tls_private_key.ssh.private_key_pem
+  file_permission = "0400"
 }
 
 data "azurerm_public_ip" "pip" {
