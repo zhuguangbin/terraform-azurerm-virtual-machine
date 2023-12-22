@@ -110,6 +110,7 @@ resource "azurerm_network_interface_security_group_association" "linux_nic" {
   network_security_group_id = azurerm_network_security_group.nsg.id
 }
 
+/*
 resource "random_password" "win_password" {
   length      = 20
   lower       = true
@@ -184,6 +185,7 @@ module "windows" {
 
   depends_on = [azurerm_key_vault_access_policy.des]
 }
+*/
 
 resource "local_file" "ssh_private_key" {
   filename = "${path.module}/key.pem"
@@ -197,5 +199,6 @@ data "azurerm_public_ip" "pip" {
   name                = azurerm_public_ip.pip[count.index].name
   resource_group_name = local.resource_group.name
 
-  depends_on = [module.linux, module.windows]
+  # depends_on = [module.linux, module.windows]
+  depends_on = [module.linux]
 }
